@@ -1,23 +1,22 @@
 package base;
 import java.io.Serializable;
-import java.util.Set;
 
 import base.HashMap;
 
-import item.AssortedOrangeSlice;
 import item.Item;
 
 
 public class Location implements Serializable {
 	
-	
-	String[] itemLocations;
+    private static final long serialVersionUID = -3149982037784772285L;
+    
+    String[] itemLocations;
 	Item[] items;
 	String zoneName;
 	String zoneDescription;
-	HashMap<String, Location> exits;
+	HashMap<String, String> exits;
 
-	public Location(String name, String description, String[] itemLocations, Item[] items, HashMap<String, Location> exits){
+	public Location(String name, String description, String[] itemLocations, Item[] items, HashMap<String, String> exits){
 		if(itemLocations.length != items.length) {
 			new Exception("Not enough locations for items, or more locations than items").printStackTrace();
 			System.exit(0);
@@ -61,9 +60,13 @@ public class Location implements Serializable {
 		}
 	}
 	public boolean go(String direction) {
-		System.out.println(direction);
-		if(exits.containsKey(direction)) {
-			Trainsaw.instance.setLocation(exits.get(direction));
+		if(exits.containsKey(direction.toUpperCase())) {
+			try {
+                Trainsaw.instance.setLocation((Location) Locations.class.getField(exits.get(direction.toUpperCase())).get("argIgnored"));
+            } catch (IllegalArgumentException | IllegalAccessException
+                    | NoSuchFieldException | SecurityException e) {
+                e.printStackTrace();
+            }
 			return true;
 		}
 		return false;

@@ -1,11 +1,9 @@
 package base;
 
-import java.util.Scanner;
-
-import base.HashMap;
-
-import item.AssortedOrangeSlice;
 import item.Item;
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Trainsaw {
@@ -16,6 +14,8 @@ public class Trainsaw {
 	
 	private Location currentLocation;
 	
+	ArrayList<Item> inventory;
+	
 	public static void main(String[] args) {
 		instance = new Trainsaw();
 		instance.start();
@@ -23,7 +23,9 @@ public class Trainsaw {
 	
 	public Trainsaw() {
 		fullness = 10;
-		currentLocation = Locations.forest;
+		Locations.initLocations();
+		inventory = new ArrayList<Item>();
+		currentLocation = Locations.forest2;
 		
 		
 	}
@@ -38,7 +40,8 @@ public class Trainsaw {
 		boolean running = true;
 		Scanner input = new Scanner(System.in);
 		while(running) {
-			String[] in = (input.next() + " ").split(" ");
+		    String[] in = input.nextLine().split("\\s+");
+			
 			if(in.length == 0) {
 				continue;
 			}
@@ -58,7 +61,6 @@ public class Trainsaw {
 		}
 		input.close();
 	}
-	
 	public void setLocation(Location location) {
 		location.printInfo();
 		this.currentLocation = location;
