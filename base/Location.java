@@ -46,8 +46,11 @@ public class Location implements Serializable {
 	}
 	public void takeItem(String itemName) {
 		for(int i = 0; i< items.length; i++) {
-			if(items[i].getName() == itemName && items[i] != MiscLib.EMPTY) {
-				System.out.println(itemName + " taken.");
+			if(items[i].getName().toUpperCase().contains(itemName.toUpperCase()) && items[i] != MiscLib.EMPTY) {
+				System.out.println(items[i].getName() + " taken.");
+
+				System.out.println(items[i].getDescription());
+				Trainsaw.instance.inventory.add(items[i]);
 				items[i] = MiscLib.EMPTY;
 				return;
 			}

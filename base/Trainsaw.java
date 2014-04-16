@@ -1,5 +1,6 @@
 package base;
 
+import item.Food;
 import item.Item;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Trainsaw {
 	
 	private Location currentLocation;
 	
-	ArrayList<Item> inventory;
+	public ArrayList<Item> inventory;
 	
 	public static void main(String[] args) {
 		instance = new Trainsaw();
@@ -49,14 +50,42 @@ public class Trainsaw {
 			
 			if(command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("quit")) {
 				running = false;
-			}
-			if(command.equalsIgnoreCase("go")) {
+			}else if(command.equalsIgnoreCase("go")) {
 				String location = "";
 				for(int i = 1; i < in.length; i++){
 					location+=in[i];
 				}
 				if(!currentLocation.go(location))
 					System.out.println("You can't go that way");
+			}else if(command.equalsIgnoreCase("pick") && in[1].equalsIgnoreCase("up")) {
+				String item = "";
+				for(int i = 2; i < in.length; i++){
+					item+=in[i];
+					if(i != in.length-1) {
+						item+=" ";
+					}
+				}
+				currentLocation.takeItem(item);
+			}else if((command.equalsIgnoreCase("look") && in.length == 1) || (command.equalsIgnoreCase("look") && in[1].equalsIgnoreCase("around"))) {
+				currentLocation.printInfo();
+			}else if(command.equalsIgnoreCase("eat")){
+				String item = "";
+				for(int i = 2; i < in.length; i++){
+					item+=in[i];
+					if(i != in.length-1) {
+						item+=" ";
+					}
+				}
+				for(Item i : inventory) {
+					if(i.getName().toUpperCase().contains(item.toUpperCase())){
+						if(i instanceof Food) {
+							((Food) i).eat();
+							break;
+						}
+					}	
+				}
+			}else{
+				System.out.println("I don't understand that.");
 			}
 		}
 		input.close();
